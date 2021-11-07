@@ -236,7 +236,7 @@ public class shapeCipherScript : MonoBehaviour {
         string[] alphabet = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         List<string> alphabetKey = new List<string>();
         List<string> alphabetKey2 = new List<string>();
-
+        int[] triangleId = { 0, 0, 0, 0, 0, 0};
         string encrypt = "";
         for (int i = 0; i < kw.Length; i++)
         {
@@ -329,10 +329,6 @@ public class shapeCipherScript : MonoBehaviour {
             Debug.LogFormat("[Shape Cipher #{0}] Triangle {1}: {2}, Rotation: {3}", moduleId, i, triangles[i], clock[i] ? "↻" : "↺");
         }
         pages[3][0] = kw;
-        pages[3][1] = triangleClock[0] + " " + triangleClock[1] + " " + triangleClock[2];
-        pages[3][2] = triangleClock[3] + " " + triangleClock[4] + " " + triangleClock[5];
-        pages[4][0] = triangleClock[6] + " " + triangleClock[7] + " " + triangleClock[8];
-        pages[4][1] = triangleClock[9] + " " + triangleClock[10] + " " + triangleClock[11];
         pages[4][2] = triangleKey.ToString();
         for (var j = 0; j < word.Length; j++)
         {
@@ -383,8 +379,13 @@ public class shapeCipherScript : MonoBehaviour {
                     chosen = j;
                 }
             }
+            triangleId[i] = chosen;
             Debug.LogFormat("[Shape Cipher #{0}] {1} {2} {3}", moduleId, word[i], clock[chosen] ? "↻" : "↺", encrypt[i]);
         }
+        pages[3][1] = triangleId[0] + " " + triangleId[1] + " " + triangleId[2];
+        pages[3][2] = triangleClock[triangleId[0]] + " " + triangleClock[triangleId[1]] + " " + triangleClock[triangleId[2]];
+        pages[4][0] = triangleId[3] + " " + triangleId[4] + " " + triangleId[5];
+        pages[4][1] = triangleClock[triangleId[3]] + " " + triangleClock[triangleId[4]] + " " + triangleClock[triangleId[5]];
         Debug.LogFormat("[Shape Cipher #{0}] Ciphertext: {1}", moduleId, encrypt);
         return encrypt;
     }
