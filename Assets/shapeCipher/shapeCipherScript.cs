@@ -21,6 +21,7 @@ public class shapeCipherScript : MonoBehaviour {
     public KMSelectable rightArrow;
     public KMSelectable submit;
     public KMSelectable[] keyboard;
+    public KMSelectable ModuleSelectable;
     private List<List<string>> wordList = new List<List<string>>();
     private bool isSolved;
     private int moduleId;
@@ -30,10 +31,25 @@ public class shapeCipherScript : MonoBehaviour {
     private string answer = "";
     private int page;
     private bool submitScreen;
+    private bool focused;
     private string triangleClock = "";
+
+    string TheLetters = "QWERTYUIOPASDFGHJKLZXCVBNMe";
+
+    private KeyCode[] TheKeys =
+    {
+        KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.T, KeyCode.Y, KeyCode.U, KeyCode.I, KeyCode.O, KeyCode.P,
+        KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F, KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.K, KeyCode.L,
+        KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V, KeyCode.B, KeyCode.N, KeyCode.M, KeyCode.Return
+    };
 
     void Awake()
     {
+        if (Application.isEditor)
+            focused = true;
+        ModuleSelectable.OnFocus += delegate () { focused = true; };
+        ModuleSelectable.OnDefocus += delegate () { focused = false; };
+
         leftArrow.OnInteract += delegate { left(leftArrow); return false; };
         rightArrow.OnInteract += delegate { right(rightArrow); return false; };
         submit.OnInteract += delegate { submitWord(submit); return false; };
@@ -455,7 +471,18 @@ public class shapeCipherScript : MonoBehaviour {
             cipher = 2;
         }
         Background.material = ciphers[cipher];
-	}
+        for(int i = 0; i < TheKeys.Count(); i++)
+        {
+            if (Input.GetKeyDown(TheKeys[i]))
+            {
+                if (isSolved == false)
+                {
+                    handleKey(TheLetters[i]);
+                }
+            }
+        }
+        
+    }
     int correction(int p, int max)
     {
         while (p < 0)
@@ -565,6 +592,23 @@ public class shapeCipherScript : MonoBehaviour {
             }
         }
     }
+    
+    void handleKey(char c)
+    {
+        if (focused)
+        {
+            if (c != 'e')
+            {
+                letterPress(keyboard[getPositionFromChar(c)]);
+            }
+            else
+            {
+                submitWord(submit);
+            }
+        }
+        
+    }
+
 
     IEnumerator SolveAnim()
     {

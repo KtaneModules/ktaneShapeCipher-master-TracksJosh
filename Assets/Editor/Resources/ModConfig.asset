@@ -18,6 +18,6 @@ MonoBehaviour:
 
 
     Manual: ktane.timwi.de/HTML/Shape%20Cipher.html'
-  version: 1.1
+  version: 1.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 853b5cea959ba6b4bb75023848a7cb3c, type: 3}
